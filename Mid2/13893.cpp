@@ -149,11 +149,11 @@ Function* Arithmetic::differential(){
         return new Arithmetic(l, '+', r);
     }
     else{
-        Function* denomiatior = new Polynomial(right, new Constant(2));
+        Function* denominator = new Polynomial(right, new Constant(2));
         Arithmetic* l = new Arithmetic(left->differential(),'*',right);
         Arithmetic* r = new Arithmetic(left,'*',right->differential());
         Arithmetic* numerator = new Arithmetic(l, '-', r);
-        return new Arithmetic(numerator,'/',denomiatior);
+        return new Arithmetic(numerator,'/',denominator);
     }
 }
 double Arithmetic::eval(double d){
