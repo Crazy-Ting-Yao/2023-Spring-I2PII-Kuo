@@ -82,7 +82,7 @@ void KuoYangPresent::Pop(){
     delete mid->next->prev;
     mid->next->prev = mid;
     sz--;
-    if(!(sz&1)) mid = mid->next;
+    if(sz&1) mid = mid->next;
 }
 void KuoYangPresent::ProgrammingTanoshi(){
     head->tag = tail->tag = 1;
