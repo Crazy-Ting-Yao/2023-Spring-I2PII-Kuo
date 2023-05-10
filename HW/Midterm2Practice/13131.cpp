@@ -112,11 +112,6 @@ int main(){
     }
 }
 
-void swap(int& a, int& b){
-    int tmp = a;
-    a = b;
-    b = tmp;
-}
 Array_MAX_HEAP::Array_MAX_HEAP(){}
 void Array_MAX_HEAP::PUSH(const int &x){
     array[++Count] = x;
