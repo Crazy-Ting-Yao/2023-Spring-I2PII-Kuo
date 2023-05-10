@@ -32,12 +32,6 @@ signed main(){
     return 0;
 }
 
-class Arithmetic;
-class Variable;
-class Polynomial;
-class Sin;
-class Cos;
-class Constant;
 class Constant : public Function{
     public:
     Constant(double x);
@@ -127,7 +121,7 @@ Constant* Constant::create(double x){
     return new Constant(x);
 }
 Function *Constant::differential(){
-    return new Constant(0);
+    return Constant::create(0);
 }
 double Constant::eval(double d){
     return val;
@@ -142,18 +136,18 @@ Arithmetic* Arithmetic::create(Function* a, char op, Function* b){
     return new Arithmetic(a,op,b);
 }
 Function* Arithmetic::differential(){
-    if(op=='+'||op=='-') return new Arithmetic(left->differential(),op,right->differential());
+    if(op=='+'||op=='-') return Arithmetic::create(left->differential(),op,right->differential());
     else if(op=='*'){
-        Arithmetic* l = new Arithmetic(left->differential(),'*',right);
-        Arithmetic* r = new Arithmetic(left,'*',right->differential());
-        return new Arithmetic(l, '+', r);
+        Arithmetic* l = Arithmetic::create(left->differential(),'*',right);
+        Arithmetic* r = Arithmetic::create(left,'*',right->differential());
+        return Arithmetic::create(l, '+', r);
     }
     else{
-        Function* denomiatior = new Polynomial(right, new Constant(2));
-        Arithmetic* l = new Arithmetic(left->differential(),'*',right);
-        Arithmetic* r = new Arithmetic(left,'*',right->differential());
-        Arithmetic* numerator = new Arithmetic(l, '-', r);
-        return new Arithmetic(numerator,'/',denomiatior);
+        Function* denominator = Polynomial::create(right, Constant::create(2));
+        Arithmetic* l = Arithmetic::create(left->differential(),'*',right);
+        Arithmetic* r = Arithmetic::create(left,'*',right->differential());
+        Arithmetic* numerator = Arithmetic::create(l, '-', r);
+        return Arithmetic::create(numerator,'/',denominator);
     }
 }
 double Arithmetic::eval(double d){
@@ -173,7 +167,7 @@ Variable* Variable::create(string s){
     return new Variable(s);
 }
 Function* Variable::differential(){
-    return new Constant(1);
+    return Constant::create(1);
 }
 double Variable::eval(double d){
     return d;
@@ -187,8 +181,8 @@ Polynomial* Polynomial::create(Function* a, Function* b){
     return new Polynomial(a,b);
 }
 Function* Polynomial::differential(){
-    Arithmetic* npow = new Arithmetic(power, '-', new Constant(1));
-    return new Arithmetic(power, '*', new Polynomial(base,npow));
+    Arithmetic* npow = Arithmetic::create(power, '-', Constant::create(1));
+    return Arithmetic::create(power, '*', Polynomial::create(base,npow));
 }
 double Polynomial::eval(double d){
     return pow(base->eval(d), power->eval(d));
@@ -201,7 +195,7 @@ Sin* Sin::create(Function* a){
     return new Sin(a);
 }
 Function* Sin::differential(){
-    return new Arithmetic(para->differential(), '*', new Cos(para));
+    return Arithmetic::create(para->differential(), '*', Cos::create(para));
 }
 double Sin::eval(double d){
     return sin(para->eval(d));
@@ -214,7 +208,7 @@ Cos* Cos::create(Function* a){
     return new Cos(a);
 }
 Function* Cos::differential(){
-    return new Arithmetic(new Constant(0),'-',new Arithmetic(para->differential(), '*', new Sin(para)));
+    return Arithmetic::create(Constant::create(0),'-',Arithmetic::create(para->differential(), '*', Sin::create(para)));
 }
 double Cos::eval(double d){
     return cos(para->eval(d));
