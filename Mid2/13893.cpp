@@ -120,7 +120,7 @@ Constant::Constant(double x){
 Constant* Constant::create(double x){
     return new Constant(x);
 }
-Function *Constant::differential(){
+Function* Constant::differential(){
     return Constant::create(0);
 }
 double Constant::eval(double d){
@@ -143,7 +143,7 @@ Function* Arithmetic::differential(){
         return Arithmetic::create(l, '+', r);
     }
     else{
-        Function* denominator = Polynomial::create(right, Constant::create(2));
+        Arithmetic* denominator = Arithmetic::create(right, '*', right);
         Arithmetic* l = Arithmetic::create(left->differential(),'*',right);
         Arithmetic* r = Arithmetic::create(left,'*',right->differential());
         Arithmetic* numerator = Arithmetic::create(l, '-', r);
@@ -182,7 +182,7 @@ Polynomial* Polynomial::create(Function* a, Function* b){
 }
 Function* Polynomial::differential(){
     Arithmetic* npow = Arithmetic::create(power, '-', Constant::create(1));
-    return Arithmetic::create(power, '*', Polynomial::create(base,npow));
+    return Arithmetic::create(base->differential(),'*',Arithmetic::create(power, '*', Polynomial::create(base,npow)));
 }
 double Polynomial::eval(double d){
     return pow(base->eval(d), power->eval(d));
