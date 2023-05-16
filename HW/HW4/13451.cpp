@@ -12,19 +12,19 @@ int main(){
         }
         else if(s=="Query"){
             std::cin>>a>>b;
-            int i;
-            unsigned int val[5];
-            for(i=0;i<b;i++){
-                std::multiset<unsigned>::iterator it = ms.find(a);
-                if(it==ms.end()) it = ms.upper_bound(a);
-                if(it==ms.end()) {std::cout<<"-1"<<std::endl; break;}
-                val[i] = *it;
-                ms.erase(it);
+            std::multiset<unsigned>::iterator it = ms.lower_bound(a);
+            if(it==ms.end()) {
+                std::cout<<"-1"<<std::endl;
+                continue;
             }
-            if(i==b) std::cout<<val[b-1]<<std::endl;
-            for(int j=0;j<i;j++){
-                ms.insert(val[j]);
-            }
+            for(int i=1;i<b;i++){
+                it++;
+                if(it==ms.end()){
+                    std::cout<<"-1"<<std::endl;
+                    break;
+                }
+            }                
+            if(it!=ms.end()) std::cout<<*it<<std::endl;
         }
     }
     return 0;
