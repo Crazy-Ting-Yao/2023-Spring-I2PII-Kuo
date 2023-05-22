@@ -1,0 +1,11 @@
+{
+    "files.associations": {
+        "*.html": "html",
+        "stack": "cpp",
+        "iosfwd": "cpp",
+        "vector": "cpp",
+        "queue": "cpp",
+        "string": "cpp",
+        "iostream": "cpp"
+    }
+}
