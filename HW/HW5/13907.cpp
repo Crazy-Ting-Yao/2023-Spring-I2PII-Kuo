@@ -1,11 +1,9 @@
 #include<iostream>
 #include<vector>
 #include<utility>
-#include<cstdio>
+#include<sstream>
 using namespace std;
 int main(){
-    freopen("input.txt","r",stdin);
-    freopen("output.txt","w",stdout);
     vector<vector<string>> stk;
     vector<string> previous;
     vector<string> current;
@@ -29,23 +27,16 @@ int main(){
                         current.clear();
                         op.erase(0,1);
                     }
-                    while(!op.empty()){
-                        string s;
-                        if(op.find('/')!=op.npos){
-                            s = op.substr(0, op.find('/'));
-                            op.erase(0,s.size()+1);
-                        }
-                        else {
-                            s = op;
-                            op.clear();
-                        } 
-                        if(s==".") continue;
-                        else if(s=="..") {
+                    stringstream ss(op);
+                    op.clear();
+                    while(getline(ss,op,'/')){
+                        if(op==".") continue;
+                        else if(op=="..") {
                             if(!current.empty()) 
                                 current.pop_back();
                         }
-                        else if(s=="~") current = home;
-                        else current.push_back(s);
+                        else if(op=="~") current = home;
+                        else current.push_back(op);
                     }
                 }
             }
@@ -74,9 +65,7 @@ int main(){
             for(auto it = stk.rbegin();it!=stk.rend();it++){
                 cout<<" ";
                 if(it->empty()) cout<<"/";
-                else for(auto &it2 : *it){
-                    cout<<"/"<<it2;
-                }
+                else for(auto &it2 : *it) cout<<"/"<<it2;
             }
             cout<<endl;
         }
@@ -94,25 +83,20 @@ int main(){
                 if(op=="-") swap(previous, current);
                 else{
                     previous = current;
-                    current.clear();
-                    if(op[0]=='/') op.erase(0,1);
-                    while(!op.empty()){
-                        string s;
-                        if(op.find('/')!=op.npos){
-                            s = op.substr(0, op.find('/'));
-                            op.erase(0,s.size()+1);
-                        }
-                        else {
-                            s = op;
-                            op.clear();
-                        } 
-                        if(s==".") continue;
-                        else if(s==".."){
+                    if(op[0]=='/') {
+                        current.clear();
+                        op.erase(0,1);
+                    }
+                    stringstream ss(op);
+                    op.clear();
+                    while(getline(ss,op,'/')){
+                        if(op==".") continue;
+                        else if(op=="..") {
                             if(!current.empty()) 
                                 current.pop_back();
                         }
-                        else if(s=="~") current = home;
-                        else current.push_back(s);
+                        else if(op=="~") current = home;
+                        else current.push_back(op);
                     }
                 }
             }
