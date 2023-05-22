@@ -82,7 +82,7 @@ int main(){
         }
         else if(op.substr(0,5)=="pushd"){
             if(op.size()==5){
-                if(stk.empty()) cout<< "pushd: directory stack empty"<<endl;
+                if(stk.empty()) cout<< "pushd: no other directory"<<endl;
                 else{
                     previous = current;
                     swap(stk.back(),current);
