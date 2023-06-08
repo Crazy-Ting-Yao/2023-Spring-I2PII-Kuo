@@ -26,7 +26,7 @@ void search_path(string path){
         else if(path=="..") {
             if(!current.empty()) 
                 current.pop_back();
-            }
+        }
         else if(path=="~") current = home;
         else current.push_back(path);
     }
