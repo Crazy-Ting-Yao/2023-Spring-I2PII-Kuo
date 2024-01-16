@@ -37,17 +37,14 @@ class state{
 
         bool win() { return monsterHP<=0; }
 
-        bool attackByMonster(){ HP -= monsterDMG; return HP>0;}   
-};
+        bool attackByMonster(){ HP -= monsterDMG; return HP>0;}  
 
-struct cmp
-{
-    bool operator()(const state &a, const state &b){
-        if(a.HP-b.HP) return  a.HP>b.HP;
-        if(a.monsterHP-b.monsterHP) return a.monsterHP>b.monsterHP;
-        return a.level>b.level;
-    }
-};  
+        bool operator>(const state &b) const{
+            if(HP-b.HP) return  HP>b.HP;
+            if(monsterHP-b.monsterHP) return monsterHP>b.monsterHP;
+            return level>b.level;
+        }
+};
 
 int main(){
     int steps = -1;
@@ -58,7 +55,7 @@ int main(){
     for(int i=1;i<=maxlevel;i++)
         std::cin>>dmgList[i]>>HLlist[i];
     std::queue<std::pair<state,int>> states;
-    std::set<state,cmp> passed;
+    std::set<state, std::greater<state>> passed;
     state initial(maxHP,MHP,1);
     passed.insert(initial);
     states.push(std::make_pair(initial,0));
